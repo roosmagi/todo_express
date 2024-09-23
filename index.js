@@ -38,7 +38,10 @@ app.get('/', (req, res) => {
     readFile('./tasks.json') 
         .then(tasks => {
             console.log(tasks)
-            res.render('index', {tasks: tasks})
+            res.render('index', {
+                tasks: tasks,
+                error: null
+            })
     })    
 })    
 
@@ -46,6 +49,18 @@ app.get('/', (req, res) => {
 app.use(express.urlencoded({ extended: true }));
 
 app.post('/', (req, res) =>{
+    // control data from form
+    let error = null
+    if(req.body.task.trim().length == 0){
+        error = 'Please insert correct task data'
+        readFile("./tasks.json")
+        .then(tasks => {
+            res.render("index", { 
+                tasks: tasks, 
+                error: error
+            })
+        })
+    } else { 
     // tasks list data from file
     readFile('./tasks.json')
         .then(tasks => {
@@ -71,7 +86,8 @@ app.post('/', (req, res) =>{
             // redirect to / to see results
             res.redirect('/')  
         })
-    })
+    }
+})
 
 app.get("/delete-task/:taskId", (req, res) => {
     let deletedTaskId = parseInt(req.params.taskId)
@@ -101,6 +117,6 @@ app.get("/delete-all", (req, res) => {
 })
 
     
-app.listen(4011, () => {
-    console.log("Example app is started at http://localhost:4011 ")
+app.listen(4004, () => {
+    console.log("Example app is started at http://localhost:4004 ")
 })
