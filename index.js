@@ -88,8 +88,19 @@ app.get("/delete-task/:taskId", (req, res) => {
         res.redirect("/")
         })
     })
+app.get("/delete-all", (req, res) => {
+    const data = []
+    fs.writeFile("./tasks.json", JSON.stringify(data), 'utf8', (err) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        console.log("Deleted all!");
+        res.redirect("/")
+    });
+})
 
     
-app.listen(4031, () => {
-    console.log("Example app is started at http://localhost:4031")
+app.listen(4011, () => {
+    console.log("Example app is started at http://localhost:4011 ")
 })
